@@ -13,19 +13,23 @@ public class Livro {
         this.disponivel = true; //Livro disponivel por padrão
     }
 
-    public boolean emprestarLivro() {
+    public void emprestarLivro() {
         if (disponivel) {
-            disponivel = false;
+            this.disponivel = false;
             System.out.println("Livro emprestado com sucesso!");
-            return true;
+
         } else {
             System.out.println("Livro indisponível");
-            return false;
+
         }
     }
 
     public void devolverLivro() {
-        disponivel = true;
+        if(disponivel) {
+            System.out.println("o livro não está emprestado");
+        }
+
+        this.disponivel = true;
         System.out.println("Livro devolvido!");
     }
 
@@ -47,6 +51,9 @@ public class Livro {
 
     public String getIsbn() {
         return isbn;
+    }
+    public boolean isDisponivel() {
+        return disponivel;
     }
 }
 

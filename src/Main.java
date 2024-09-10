@@ -1,5 +1,6 @@
 package src;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,6 +31,18 @@ public class Main {
                 case 5:
                     buscarLivroPorISBN(scanner);
                     break;
+                case 6:
+                    adicionarMembro(scanner);
+                    break;
+                case 7:
+                    registrarEmprestimo(scanner);
+                    break;
+                case 8:
+                    listarTodosOsAutores();
+                    break;
+                case 9:
+                    registrarDevolucao(scanner);
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     scanner.close();
@@ -46,6 +59,11 @@ public class Main {
         System.out.println("2. Listar Livros por Autor");
         System.out.println("3. Buscar Livros por Título");
         System.out.println("4. Listar Todos os Livros");
+        System.out.println("5. Buscar Livro por ISBN");
+        System.out.println("6. Adicionar Membro");
+        System.out.println("7. Registrar Empréstimo");
+        System.out.println("8. Listar Todos os Autores");
+        System.out.println("9. Registrar Devolução");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -128,5 +146,80 @@ public class Main {
         } else {
             System.out.println(livro);
         }
+    }
+    private static void adicionarMembro(Scanner scanner) {
+        System.out.println("1. Adicionar Estudante");
+        System.out.println("2. Adicionar Professor");
+        System.out.print("Escolha o tipo de membro: ");
+        int tipoMembro = -1;
+        boolean validacao = false;
+        do {
+            try {
+                tipoMembro = scanner.nextInt();
+                scanner.nextLine();
+                validacao = true;
+                if (tipoMembro == 1 || tipoMembro == 2) {
+                    validacao = true;
+                } else {
+                    System.out.println("Escolha uma opção válida (1 ou 2)");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Escolha uma opção valida");
+                scanner.next(); //limpar buffer
+            }
+        }
+        while (!validacao);
+
+        System.out.print("Digite o nome do membro: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Digite o ID do membro: ");
+        String idMembro = scanner.nextLine();
+
+        switch (tipoMembro) {
+            case 1:
+                System.out.print("Digite o curso do estudante: ");
+                String curso = scanner.nextLine();
+                Estudante estudante = new Estudante(nome, idMembro, curso);
+                biblioteca.adicionarMembro(estudante);
+                System.out.println("Estudante adicionado com sucesso!");
+                break;
+            case 2:
+                System.out.print("Digite o departamento do professor: ");
+                String departamento = scanner.nextLine();
+                Professor professor = new Professor(nome, idMembro, departamento);
+                biblioteca.adicionarMembro(professor);
+                System.out.println("Professor adicionado com sucesso!");
+                break;
+            default:
+                System.out.println("Tipo de membro inválido.");
+        }
+    }
+    private static void registrarEmprestimo(Scanner scanner) {
+        System.out.print("Digite o ID do membro: ");
+        String idMembro = scanner.nextLine();
+
+        System.out.print("Digite o ISBN do livro: ");
+        String isbn = scanner.nextLine();
+
+        biblioteca.registrarEmprestimo(idMembro, isbn);
+    }
+    private static void listarTodosOsAutores() {
+        List<Autor> autores = biblioteca.listarAutores();
+
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor cadastrado na biblioteca.");
+        } else {
+            autores.forEach(System.out::println);
+        }
+    }
+    private static void registrarDevolucao(Scanner scanner) {
+        System.out.print("Digite o ID do membro: ");
+        String idMembro = scanner.nextLine();
+
+        System.out.print("Digite o ISBN do livro: ");
+        String isbn = scanner.nextLine();
+
+        biblioteca.registrarDevolucao(idMembro, isbn);
     }
 }

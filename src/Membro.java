@@ -15,20 +15,6 @@ public class Membro {
         this.historicoEmprestimos = new ArrayList<>();
     }
 
-
-
-    public void registrarEmprestimo(Livro livro) {
-        if (livro.emprestarLivro()) {
-            historicoEmprestimos.add(livro);
-        }
-    }
-
-    public void registrarDevolucao(Livro livro) {
-        if (historicoEmprestimos.contains(livro)) {
-            livro.devolverLivro();
-        }
-        else System.out.println("Este livro não está no histórico de empréstimos deste membro.");
-    }
     //Getts
     public String getNome() {
         return nome;
@@ -46,6 +32,9 @@ public class Membro {
     public String toString() {
         return String.format("Membro [Nome: %s, ID: %s, Empréstimos: %d]",
                 nome, idMembro, historicoEmprestimos.size());
+    }
+    public void adicionarEmprestimo(Livro livro) {
+        historicoEmprestimos.add(livro);
     }
 }
 
