@@ -1,8 +1,7 @@
 package src;
 
-import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
+import java.util.List;
 
 public class Main {
     private static final Biblioteca biblioteca = new Biblioteca();
@@ -13,7 +12,7 @@ public class Main {
         while (true) {
             showMenu();
             int option = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // consome o caractere newline
 
             switch (option) {
                 case 1:
@@ -70,21 +69,21 @@ public class Main {
 
     private static void adicionarLivro(Scanner scanner) {
         System.out.print("Digite o título do livro: ");
-        String titulo = scanner.nextLine();
+        String titulo = scanner.nextLine().trim();
 
         System.out.print("Digite o nome do autor: ");
-        String nomeAutor = scanner.nextLine();
+        String nomeAutor = scanner.nextLine().trim();
 
         System.out.print("Digite a nacionalidade do autor: ");
-        String nacionalidade = scanner.nextLine();
+        String nacionalidade = scanner.nextLine().trim();
 
-        System.out.print("Digite a data de nascimento do autor (dd/mm/yyyy): ");
-        String dataNascimento = scanner.nextLine();
-
-        System.out.print("Digite o ISBN do livro: ");
-        String isbn = scanner.nextLine();
+        System.out.print("Digite a data de nascimento do autor: ");
+        String dataNascimento = scanner.nextLine().trim();
 
         Autor autor = new Autor(nomeAutor, nacionalidade, dataNascimento);
+
+        System.out.print("Digite o ISBN do livro: ");
+        String isbn = scanner.nextLine().trim();
 
         Livro livro = new Livro(titulo, autor, isbn);
         biblioteca.adicionarLivro(livro);
@@ -94,18 +93,20 @@ public class Main {
 
     private static void listarLivrosPorAutor(Scanner scanner) {
         System.out.print("Digite o nome do autor: ");
-        String nomeAutor = scanner.nextLine();
+        String nomeAutor = scanner.nextLine().trim();
 
         System.out.print("Digite a nacionalidade do autor: ");
-        String nacionalidade = scanner.nextLine();
+        String nacionalidade = scanner.nextLine().trim();
 
-        System.out.print("Digite a data de nascimento do autor (dd/mm/yyyy): ");
-        String dataNascimento = scanner.nextLine();
+        System.out.print("Digite a data de nascimento do autor: ");
+        String dataNascimento = scanner.nextLine().trim();
 
         Autor autor = new Autor(nomeAutor, nacionalidade, dataNascimento);
 
+        System.out.println("Procurando livros para o autor: " + autor);
         List<Livro> livros = biblioteca.listarLivrosPorAutor(autor);
 
+        System.out.println("Livros encontrados: " + livros.size());
         if (livros.isEmpty()) {
             System.out.println("Nenhum livro encontrado para este autor.");
         } else {
@@ -115,7 +116,7 @@ public class Main {
 
     private static void buscarLivrosPorTitulo(Scanner scanner) {
         System.out.print("Digite o título do livro: ");
-        String titulo = scanner.nextLine();
+        String titulo = scanner.nextLine().trim();
 
         List<Livro> livros = biblioteca.buscarLivrosPorTitulo(titulo);
 
@@ -135,9 +136,10 @@ public class Main {
             livros.forEach(System.out::println);
         }
     }
+
     private static void buscarLivroPorISBN(Scanner scanner) {
         System.out.print("Digite o ISBN do livro: ");
-        String isbn = scanner.nextLine();
+        String isbn = scanner.nextLine().trim();
 
         Livro livro = biblioteca.buscarLivroPorISBN(isbn);
 
@@ -147,46 +149,32 @@ public class Main {
             System.out.println(livro);
         }
     }
+
     private static void adicionarMembro(Scanner scanner) {
         System.out.println("1. Adicionar Estudante");
         System.out.println("2. Adicionar Professor");
         System.out.print("Escolha o tipo de membro: ");
-        int tipoMembro = -1;
-        boolean validacao = false;
-        do {
-            try {
-                tipoMembro = scanner.nextInt();
-                scanner.nextLine();
-                validacao = true;
-                if (tipoMembro == 1 || tipoMembro == 2) {
-                    validacao = true;
-                } else {
-                    System.out.println("Escolha uma opção válida (1 ou 2)");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Escolha uma opção valida");
-                scanner.next(); //limpar buffer
-            }
-        }
-        while (!validacao);
+
+        int tipoMembro = scanner.nextInt();
+        scanner.nextLine(); // consome o caractere newline
 
         System.out.print("Digite o nome do membro: ");
-        String nome = scanner.nextLine();
+        String nome = scanner.nextLine().trim();
 
         System.out.print("Digite o ID do membro: ");
-        String idMembro = scanner.nextLine();
+        String idMembro = scanner.nextLine().trim();
 
         switch (tipoMembro) {
             case 1:
                 System.out.print("Digite o curso do estudante: ");
-                String curso = scanner.nextLine();
+                String curso = scanner.nextLine().trim();
                 Estudante estudante = new Estudante(nome, idMembro, curso);
                 biblioteca.adicionarMembro(estudante);
                 System.out.println("Estudante adicionado com sucesso!");
                 break;
             case 2:
                 System.out.print("Digite o departamento do professor: ");
-                String departamento = scanner.nextLine();
+                String departamento = scanner.nextLine().trim();
                 Professor professor = new Professor(nome, idMembro, departamento);
                 biblioteca.adicionarMembro(professor);
                 System.out.println("Professor adicionado com sucesso!");
@@ -195,15 +183,27 @@ public class Main {
                 System.out.println("Tipo de membro inválido.");
         }
     }
+
     private static void registrarEmprestimo(Scanner scanner) {
         System.out.print("Digite o ID do membro: ");
-        String idMembro = scanner.nextLine();
+        String idMembro = scanner.nextLine().trim();
 
         System.out.print("Digite o ISBN do livro: ");
-        String isbn = scanner.nextLine();
+        String isbn = scanner.nextLine().trim();
 
         biblioteca.registrarEmprestimo(idMembro, isbn);
     }
+
+    private static void registrarDevolucao(Scanner scanner) {
+        System.out.print("Digite o ID do membro: ");
+        String idMembro = scanner.nextLine().trim();
+
+        System.out.print("Digite o ISBN do livro: ");
+        String isbn = scanner.nextLine().trim();
+
+        biblioteca.registrarDevolucao(idMembro, isbn);
+    }
+
     private static void listarTodosOsAutores() {
         List<Autor> autores = biblioteca.listarAutores();
 
@@ -212,14 +212,5 @@ public class Main {
         } else {
             autores.forEach(System.out::println);
         }
-    }
-    private static void registrarDevolucao(Scanner scanner) {
-        System.out.print("Digite o ID do membro: ");
-        String idMembro = scanner.nextLine();
-
-        System.out.print("Digite o ISBN do livro: ");
-        String isbn = scanner.nextLine();
-
-        biblioteca.registrarDevolucao(idMembro, isbn);
     }
 }

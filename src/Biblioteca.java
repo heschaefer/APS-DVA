@@ -26,10 +26,18 @@ public class Biblioteca {
         membros.add(membro);
     }
     public List<Livro> listarLivrosPorAutor(Autor autor) {
-        return livros.stream()
-                .filter(livro -> livro.getAutor().equals(autor))
+        List<Livro> listaPorAutor = livros.stream()
+                .filter(livro -> {
+                    boolean mesmoAutor = livro.getAutor().equals(autor);
+                    if (mesmoAutor) {
+                        System.out.println("Comparação autor realizada com sucesso: " + livro.getAutor().getNome());
+                    }
+                    return mesmoAutor;
+                })
                 .collect(Collectors.toList());
 
+        System.out.println("Livros encontrados: " + listaPorAutor.size());
+        return listaPorAutor;
     }
     public List<Livro> buscarLivrosPorTitulo(String titulo) {
         return livros.stream()
@@ -43,11 +51,12 @@ public class Biblioteca {
                 .orElse(null);
     }
     public List<Autor> listarAutores() {
-        return List.copyOf(autores);
+        return new ArrayList<>(autores);
     }
     @Override
     public String toString() {
-        return String.format("Biblioteca [Total de livros: %d]", livros.size());
+        return String.format("Biblioteca [Total de livros: %d, Total de autores: %d, Total de membros: %d]",
+                livros.size(), autores.size(), membros.size());
     }
 
     public List<Livro> getLivros() {
